@@ -1,0 +1,18 @@
+{
+    "name": "JBNU 벨트 마스터",
+    "description": "Build an Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "index.html"
+    },
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+      },
+      "icons": {
+        "16": "./assets/images/심볼_01.png",
+        "32": "./assets/images/심볼_01.png",
+        "48": "./assets/images/심볼_01.png",
+        "128": "./assets/images/심볼_01.png"
+      }
+}
