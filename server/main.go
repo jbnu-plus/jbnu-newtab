@@ -6,17 +6,19 @@ import (
 	"strings"
 
 	"github.com/antchfx/htmlquery"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 type Notice struct {
 	Group    string `json:"group"`
 	Left     string `json:"left"`
-	LeftLink string `json:"lefLink"`
+	LeftLink string `json:"leftLink"`
 }
 
-func Cralwer() ([]Notice, error) {
-	doc, err := htmlquery.LoadURL("https://www.jbnu.ac.kr/kor/?menuID=139&pno=1")
+func Cralwer(page string) ([]Notice, error) {
+	noticeList := []Notice{}
+	doc, err := htmlquery.LoadURL("https://www.jbnu.ac.kr/kor/?menuID=139&pno=" + page)
 
 	if err != nil {
 		fmt.Println(err)
@@ -29,8 +31,6 @@ func Cralwer() ([]Notice, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-
-	noticeList := []Notice{}
 
 	for _, val := range list {
 		tdList, err := htmlquery.QueryAll(val, "//td")
@@ -53,8 +53,7 @@ func Cralwer() ([]Notice, error) {
 			return nil, err
 		}
 
-		noticeList = append(noticeList, Notice{strings.Trim(strings.Replace(strings.Replace(htmlquery.InnerText(group), "\t", "", -1), "\n", "", -1), " "), strings.Trim(strings.Replace(strings.Replace(htmlquery.InnerText(left), "\t", "", -1), "\n", "", -1), " "), "https://jbnu.ac.kr" + htmlquery.SelectAttr(left, "href")})
-		// noticeList = append(noticeList, Notice{ strings.Trim(strings.Trim(strings.Trim(htmlquery.SelectAttr(group, "value"), " "),"\t"),"\n"),  strings.Trim(strings.Trim(strings.Trim(htmlquery.SelectAttr(left, "value"), " "), "\t"), "\n"), "https://jbnu.ac.kr" + htmlquery.SelectAttr(left, "href")})
+		noticeList = append(noticeList, Notice{strings.Trim(strings.Replace(strings.Replace(htmlquery.InnerText(group), "\t", "", -1), "\n", "", -1), " "), strings.Trim(strings.Replace(strings.Replace(htmlquery.InnerText(left), "\t", "", -1), "\n", "", -1), " "), "https://www.jbnu.ac.kr/kor" + htmlquery.SelectAttr(left, "href")})
 	}
 
 	return noticeList, nil
@@ -62,8 +61,12 @@ func Cralwer() ([]Notice, error) {
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		noticeList, err := Cralwer()
+
+	r.Use(cors.Default())
+
+	r.GET("/notice", func(c *gin.Context) {
+		page := c.DefaultQuery("page", "1")
+		noticeList, err := Cralwer(page)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -73,7 +76,7 @@ func main() {
 		}
 		fmt.Println(string(res))
 
-		c.JSON(200, string(res))
+		c.PureJSON(200, string(res))
 	})
 
 	r.Run()
