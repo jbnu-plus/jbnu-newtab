@@ -1,0 +1,7 @@
+.grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.logo {
+    width: 250px;
+}
