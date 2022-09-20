@@ -5,3 +5,32 @@
 .logo {
     width: 250px;
 }
+.belt-section {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+}
+.white-belt {
+    text-align: center;
+    background-color: white;
+    color: black;
+}
+.yellow-belt {
+    text-align: center;
+    background-color: yellow;
+    color: black;
+}
+.blue-belt {
+    text-align: center;
+    background-color: blue;
+    color: white;
+}
+.red-belt {
+    text-align: center;
+    background-color: red;
+    color: white;
+}
+.black-belt {
+    text-align: center;
+    background-color: black;
+    color: white;
+}
