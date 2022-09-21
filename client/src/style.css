@@ -1,3 +1,7 @@
+body {
+    background-image: linear-gradient(0deg, rgba(85, 85, 85, 0.7), rgba(85, 85, 85, 0.7)), url(../assets/images/CBNUphoto_5464x3070_20220921195909.jpg);
+    background-size: cover;
+}
 .grid {
     display: grid;
     grid-template-columns: 50% 50%;
@@ -5,32 +9,75 @@
 .logo {
     width: 250px;
 }
+.logo-group {
+    position: absolute;
+    top: 90%;
+    left: 80%;
+}
+.notice-group {
+    padding: 10%;
+    color: white;
+}
+.notice-element {
+    color: white;
+}
+.notice-name {
+    text-decoration: none;
+    color: white;
+}
+.notice-name:hover {
+    text-decoration: none;
+    color: gray;
+}
+.check-list-group {
+    padding: 10%;
+    color: white;
+}
+.check-element {
+    color: white;
+}
+.check-list > thead > tr > th,td {
+    color: white;
+}
 .belt-section {
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
 }
 .white-belt {
+    cursor: pointer;
     text-align: center;
-    background-color: white;
+    background-color: rgb(225 226 228);
     color: black;
 }
 .yellow-belt {
+    cursor: pointer;
     text-align: center;
-    background-color: yellow;
-    color: black;
+    background-color: rgb(224 188 119);
+    color: white;
 }
 .blue-belt {
+    cursor: pointer;
     text-align: center;
-    background-color: blue;
+    background-color: rgb(139 176 206);
     color: white;
 }
 .red-belt {
+    cursor: pointer;
     text-align: center;
-    background-color: red;
+    background-color: rgb(202 117 104);
     color: white;
 }
 .black-belt {
+    cursor: pointer;
     text-align: center;
-    background-color: black;
+    background-color: rgb(108 109 112);
     color: white;
+}
+.unselectable {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }

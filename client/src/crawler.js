@@ -6,8 +6,9 @@
         console.log(data);
         const noticeList = JSON.parse(data);
         let noticeGroup = document.getElementById("noticeGroup");
+        let index = 1;
         for (const notice of noticeList) {
-            let noticeElement = `<div class="notice-element"><a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
+            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
             noticeGroup.innerHTML += noticeElement;
         }
     });
@@ -49,9 +50,9 @@
             const savedData = await getLocal(section.name);
             const isChecked = !!savedData[section.name];
             if(isChecked) {
-                checkList.tBodies[0].innerHTML += `<tr><td><input class="check-box" type="checkbox" checked></td><td>${section.name}</td></tr>`;
+                checkList.tBodies[0].innerHTML += `<tr><td><input class="check-box" type="checkbox" checked></td><td class="check-element">${section.name}</td></tr>`;
             } else {
-                checkList.tBodies[0].innerHTML += `<tr><td><input class="check-box" type="checkbox"></td><td>${section.name}</td></tr>`;
+                checkList.tBodies[0].innerHTML += `<tr><td><input class="check-box" type="checkbox"></td><td class="check-element">${section.name}</td></tr>`;
             }    
         }
 
