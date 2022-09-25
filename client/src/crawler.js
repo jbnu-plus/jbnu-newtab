@@ -1,15 +1,20 @@
 (function() {
+    const baseURL = `http://localhost:8080`;
     let selectedBelt = 'whiteBelt';
     let myFile = {};
 
-    fetch('http://localhost:8080/notice').then((res) => res.json()).then((data) => {
+    fetch(baseURL+ "/notice").then((res) => res.json()).then((data) => {
         console.log(data);
         const noticeList = JSON.parse(data);
         let noticeGroup = document.getElementById("noticeGroup");
-        let index = 1;
-        for (const notice of noticeList) {
-            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
-            noticeGroup.innerHTML += noticeElement;
+        if(noticeList.length == 0) {
+            noticeGroup.innerHTML += `<div class="notice-empty">오늘 올라온 공지가 없습니다.</div>`
+        } else {
+            let index = 1;
+            for(const notice of noticeList) {
+                let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
+                noticeGroup.innerHTML += noticeElement;
+            }
         }
     });
     
