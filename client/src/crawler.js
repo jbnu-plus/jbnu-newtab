@@ -8,7 +8,7 @@
         const noticeList = JSON.parse(data);
         let noticeGroup = document.getElementById("noticeGroup");
         if(noticeList.length == 0) {
-            noticeGroup.innerHTML += `<div class="notice-empty">오늘 올라온 공지가 없습니다.</div>`
+            noticeGroup.innerHTML += `<div class="notice-empty">올라온 공지가 없습니다.</div>`
         } else {
             let index = 1;
             for(const notice of noticeList) {
