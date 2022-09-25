@@ -1,6 +1,6 @@
 {
-    "name": "JBNU 벨트 마스터",
-    "description": "Build an Extension",
+    "name": "JBNU 새탭",
+    "description": "성실한 전북대 학생을 위한 새탭 extension",
     "version": "1.0",
     "manifest_version": 3,
     "permissions": [
