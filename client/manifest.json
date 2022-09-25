@@ -6,9 +6,6 @@
     "permissions": [
         "storage"
     ],
-    "action": {
-        "default_popup": "./src/index.html"
-    },
     "chrome_url_overrides": {
         "newtab": "./src/index.html"
       },
