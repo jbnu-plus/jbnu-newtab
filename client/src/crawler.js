@@ -1,8 +1,9 @@
 (function() {
+    const baseURL = `http://localhost:8080`;
     let selectedBelt = 'whiteBelt';
     let myFile = {};
 
-    fetch('http://localhost:8080/notice').then((res) => res.json()).then((data) => {
+    fetch(baseURL+ "/notice").then((res) => res.json()).then((data) => {
         console.log(data);
         const noticeList = JSON.parse(data);
         let noticeGroup = document.getElementById("noticeGroup");
