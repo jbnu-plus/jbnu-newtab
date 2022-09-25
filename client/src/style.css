@@ -18,6 +18,10 @@ body {
     padding: 10%;
     color: white;
 }
+.notice-empty {
+    color: gray;
+    text-align: center;
+}
 .notice-element {
     color: white;
 }
