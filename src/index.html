@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="kr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JBNU 새탭</title>
+    <title>새탭 | JBNU</title>
     <link href="../libs/bootstrap-5.2.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="./font.css" rel="stylesheet">
     <link href="./style.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="logo-group">
         <img class="logo" src="../assets/images/logotype_korean+English_bold_w.png" alt="전북대학교 새탭">
     </div>
-    
+
     <div class="container-fluid">
-        <div class="grid">
+        <div class="main-grid">
             <div class="notice-group" id="noticeGroup">
                 <h2>
                     오늘 올라온 공지 글
@@ -43,8 +45,26 @@
                 </table>
             </div>
         </div>
+        <div class="keyword-notice-group" id="keywordNoticeGroup">
+            <div class="keyword-grid" id="keywordGrid">
+                <h2>
+                    키워드 검색
+                </h2>
+                <div class="keyword-add-btn" id="keywordAddBtn">+</div>
+                <div class="keyword-list" id="keywordList"></div>
+            </div>
+            <div class="keyword-notice-list" id="keywordNoticeList"></div>
+        </div>
+    </div>
+    <div class="keyword-input-group" id="keywordInputGroup" hidden>
+        <div class="keyword-input-grid">
+            <input type="text" class="form-control keyword-input" id="keywordInput" placeholder="키워드를 입력해주세요!">
+            <button class="btn btn-primary ms-2" id="keywordSubmit">추가</button>
+            <button class="btn btn-secondary ms-2" id="keywordInputGroupCloseBtn">닫기</button> 
+        </div>
     </div>
 </body>
 <script src="../libs/bootstrap-5.2.1-dist/js/bootstrap.min.js"></script>
 <script src="./main.js"></script>
+
 </html>
