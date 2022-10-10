@@ -87,9 +87,71 @@ async function addKeyword(keyword) {
 
     let keyValue = { "keyword": keywords };
 
-    chrome.storage.local.set(keyValue);
+    chrome.storage.local.set(keyValue).then(() => {
+        let keywordList = document.getElementById('keywordList');
+        keywordList.innerHTML = ``;
+        for (let i = 0; i < keywords.length; i++) {
+            if (keywords[i] === selectedKeyword) {
+                keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword selected-keyword" value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
+            }
+            else keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword " value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
+            fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keywords[i]}&sfv=subject`).then((res) => res.text()).then((html) => {
+                // html 파싱
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(html, 'text/html');
 
-    updateKeywordSearch();
+                let trElement = doc.querySelectorAll('table tbody tr');
+
+                let keywordNoticeArr = [];
+                for (let j = 0; j < trElement.length; j++) {
+                    let notice = {};
+                    let thElement = trElement[j].children;
+
+                    if (thElement[0].innerText == "") continue;
+
+
+                    let groupElement = thElement[1].querySelector('span');
+                    let leftElement = thElement[2].querySelector('span a');
+
+                    notice['group'] = groupElement.innerText;
+                    notice['left'] = leftElement.innerText;
+                    notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
+                    date = thElement[5].innerText;
+                    // if(new Date(date) < new Date()) 
+                    //     break;
+                    notice['date'] = date;
+
+                    keywordNoticeArr.push(notice);
+                }
+
+                keywordNoticeList[keywords[i]] = keywordNoticeArr;
+
+                // 파싱 데이터 html 로 변경
+                let keywordNoticeGroup = document.getElementById("keywordNoticeList");
+                if (!!keywordNoticeList[selectedKeyword]) {
+
+                } else if (keywordNoticeList[selectedKeyword].length == 0) {
+                    keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
+                } else {
+                    let index = 1;
+                    for (const notice of keywordNoticeList[selectedKeyword]) {
+                        let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}<small class="mute">${notice.date}</small></div></div>`;
+                        keywordNoticeGroup.innerHTML += noticeElement;
+                    }
+                }
+
+                let deleteBtns = document.getElementsByClassName("keyword-delete-btn");
+                for (let i = 0; i < deleteBtns.length; i++) {
+                    deleteBtns[i].addEventListener('click', (event) => {
+                        deleteKeyword(deleteBtns[i].getAttribute('value'));
+                    });
+                }
+            });
+
+
+            setKeywordBtn();
+        }
+    });
 }
 
 async function deleteKeyword(keyword) {
@@ -207,8 +269,6 @@ async function updateKeywordSearch() {
                 notice['left'] = leftElement.innerText;
                 notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
                 date = thElement[5].innerText;
-                // if(new Date(date) < new Date()) 
-                //     break;
                 notice['date'] = date;
 
                 keywordNoticeArr.push(notice);
