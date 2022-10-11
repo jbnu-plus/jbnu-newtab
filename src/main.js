@@ -27,7 +27,7 @@ fetch(univURL).then((res) => res.text()).then((html) => {
         notice['left'] = leftElement.innerText;
         notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
         date = thElement[5].innerText;
-        if (new Date(date) < new Date())
+        if (new Date(date) > new Date())
             break;
         notice['date'] = date;
 
