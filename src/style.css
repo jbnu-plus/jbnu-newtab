@@ -190,3 +190,14 @@ body {
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+.report-and-question {
+    text-decoration: none;
+    color: gray;
+    position:absolute;
+    top: 90%
+}
+
+.report-and-question:hover {
+    color: rgb(170, 170, 170);
+}
