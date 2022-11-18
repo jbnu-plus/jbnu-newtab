@@ -6,9 +6,6 @@
     "permissions": [
         "storage"
     ],
-    "host_permissions": [
-        "*://*.jbnu.ac.kr/*"
-    ],
     "chrome_url_overrides": {
         "newtab": "./src/index.html"
       },
