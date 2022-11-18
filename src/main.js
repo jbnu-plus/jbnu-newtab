@@ -1,7 +1,5 @@
-
 // const baseURL = `http://localhost:8080`;
 const univURL = `http://www.jbnu.ac.kr/kor/?menuID=139`;
-let selectedBelt = 'whiteBelt';
 let selectedKeyword = '';
 let myFile = {};
 let noticeList = [];
@@ -49,36 +47,7 @@ fetch(univURL).then((res) => res.text()).then((html) => {
 
 });
 
-
-
-chrome.runtime.getPackageDirectoryEntry(function (root) {
-    root.getDirectory("assets", {}, (dirEntry) => {
-        dirEntry.getDirectory("json", {}, (dirEntry) => {
-            dirEntry.getFile("belt.json", {}, function (fileEntry) {
-                fileEntry.file(function (file) {
-                    let reader = new FileReader();
-                    reader.onloadend = function (e) {
-                        myFile = JSON.parse(this.result);
-
-                        updateCheckList();
-                    };
-                    reader.readAsText(file);
-                });
-            });
-        });
-    });
-});
-
 updateKeywordSearch();
-
-let beltSection = document.getElementById("beltSection").children;
-
-for (let section of beltSection) {
-    section.addEventListener('click', (e) => {
-        selectedBelt = section.id;
-        updateCheckList();
-    });
-}
 
 async function addKeyword(keyword) {
     let keywords = await getKeywords();
@@ -311,24 +280,6 @@ async function getKeywords() {
         const keywords = data['keyword'];
         return keywords;
     }
-}
-// update checklist
-async function updateCheckList() {
-    let checkList = document.getElementById("checkList");
-
-    checkList.tBodies[0].innerHTML = ``;
-
-    for (const section of myFile[selectedBelt]) {
-        const savedData = await getLocal(section.name);
-        const isChecked = !!savedData[section.name];
-        if (isChecked) {
-            checkList.tBodies[0].innerHTML += `<tr><td class="check-box-container"><input class="check-box" type="checkbox" checked></td><td class="check-element">${section.name}</td></tr>`;
-        } else {
-            checkList.tBodies[0].innerHTML += `<tr><td class="check-box-container"><input class="check-box" type="checkbox"></td><td class="check-element">${section.name}</td></tr>`;
-        }
-    }
-
-    updateCheckBoxEventListener();
 }
 
 function getLocal(key) {
