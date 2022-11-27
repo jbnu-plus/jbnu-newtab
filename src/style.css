@@ -4,8 +4,20 @@
     width: 80%;
 }
 .keyword-notice-list {
-    overflow: scroll; 
+    overflow-y: scroll; 
+    overflow-x: hidden;
     height: inherit;
+}
+.keyword-notice-list::-webkit-scrollbar {
+    width: 10px;
+}
+.keyword-notice-list::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 10px;
+}
+.keyword-notice-list::-webkit-scrollbar-track {
+    background-color: gray;
+    border-radius: 10px;
 }
 body {
     padding: 5%;
@@ -121,8 +133,15 @@ body {
 }
 .notice-group {
     color: white;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
+
+.notice-group::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
 .notice-empty {
     color: gray;
     text-align: center;
@@ -138,53 +157,7 @@ body {
     text-decoration: none;
     color: gray;
 }
-.check-list-group {
-    color: white;
-    overflow: scroll;
-}
-.check-box-container {
-    width: 10px;
-}
-.check-element {
-    color: white;
-}
-.check-list > thead > tr > th,td {
-    color: white;
-}
-.belt-section {
-    display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-}
-.white-belt {
-    cursor: pointer;
-    text-align: center;
-    background-color: rgb(225 226 228);
-    color: black;
-}
-.yellow-belt {
-    cursor: pointer;
-    text-align: center;
-    background-color: rgb(224 188 119);
-    color: white;
-}
-.blue-belt {
-    cursor: pointer;
-    text-align: center;
-    background-color: rgb(139 176 206);
-    color: white;
-}
-.red-belt {
-    cursor: pointer;
-    text-align: center;
-    background-color: rgb(202 117 104);
-    color: white;
-}
-.black-belt {
-    cursor: pointer;
-    text-align: center;
-    background-color: rgb(108 109 112);
-    color: white;
-}
+
 .unselectable {
     user-drag: none;
     -webkit-user-drag: none;
