@@ -12,11 +12,11 @@
     ],
     "chrome_url_overrides": {
         "newtab": "./src/index.html"
-      },
-      "icons": {
-        "16": "./assets/images/심볼_01.png",
-        "32": "./assets/images/심볼_01.png",
-        "48": "./assets/images/심볼_01.png",
-        "128": "./assets/images/심볼_01.png"
-      }
+    },
+    "icons": {
+      "16": "./assets/images/심볼_01.png",
+      "32": "./assets/images/심볼_01.png",
+      "48": "./assets/images/심볼_01.png",
+      "128": "./assets/images/심볼_01.png"
+    }
 }
