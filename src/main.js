@@ -77,7 +77,7 @@ async function addKeyword(keyword) {
                     let notice = {};
                     let thElement = trElement[j].children;
 
-                    if (thElement[0].innerText == "") continue;
+                    if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
 
                     let groupElement = thElement[1].querySelector('span');
@@ -158,7 +158,7 @@ async function deleteKeyword(keyword) {
                 let notice = {};
                 let thElement = trElement[j].children;
 
-                if (thElement[0].innerText == "") continue;
+                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
 
                 let groupElement = thElement[1].querySelector('span');
@@ -227,11 +227,8 @@ async function updateKeywordSearch() {
                 let notice = {};
                 let thElement = trElement[j].children;
 
-                if (thElement[0].innerText == "") continue;
+                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
-                if (thElement == undefined || thElement == null) {
-                    continue;
-                }
                 let groupElement = thElement[1].querySelector('span');
                 let leftElement = thElement[2].querySelector('span a');
 
