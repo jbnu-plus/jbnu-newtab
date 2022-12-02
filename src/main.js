@@ -53,7 +53,7 @@ async function addKeyword(keyword) {
     let keywords = await getKeywords();
 
     keywords.push(keyword);
-
+    selectedKeyword = keyword
     let keyValue = { "keyword": keywords };
 
     await setLocal(keyValue);
@@ -77,7 +77,7 @@ async function addKeyword(keyword) {
                     let notice = {};
                     let thElement = trElement[j].children;
 
-                    if (thElement[0].innerText == "") continue;
+                    if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
 
                     let groupElement = thElement[1].querySelector('span');
@@ -98,7 +98,7 @@ async function addKeyword(keyword) {
 
                 // 파싱 데이터 html 로 변경
                 let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-                if (!!keywordNoticeList[selectedKeyword]) {
+                if (!!!keywordNoticeList[selectedKeyword]) {
 
                 } else if (keywordNoticeList[selectedKeyword].length == 0) {
                     keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -158,7 +158,7 @@ async function deleteKeyword(keyword) {
                 let notice = {};
                 let thElement = trElement[j].children;
 
-                if (thElement[0].innerText == "") continue;
+                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
 
                 let groupElement = thElement[1].querySelector('span');
@@ -179,7 +179,7 @@ async function deleteKeyword(keyword) {
 
             // 파싱 데이터 html 로 변경
             let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-            if (!!keywordNoticeList[selectedKeyword]) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -227,11 +227,8 @@ async function updateKeywordSearch() {
                 let notice = {};
                 let thElement = trElement[j].children;
 
-                if (thElement[0].innerText == "") continue;
+                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
 
-                if (thElement == undefined || thElement == null) {
-                    continue;
-                }
                 let groupElement = thElement[1].querySelector('span');
                 let leftElement = thElement[2].querySelector('span a');
 
@@ -248,7 +245,7 @@ async function updateKeywordSearch() {
 
             // 파싱 데이터 html 로 변경
             let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-            if (keywordNoticeList == undefined || keywordNoticeList == null) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML = `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -365,7 +362,7 @@ function setKeywordBtn() {
 
             keywordNoticeGroup.innerHTML = ``;
 
-            if (keywordNoticeList == undefined || keywordNoticeList == null) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
