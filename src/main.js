@@ -53,7 +53,7 @@ async function addKeyword(keyword) {
     let keywords = await getKeywords();
 
     keywords.push(keyword);
-
+    selectedKeyword = keyword
     let keyValue = { "keyword": keywords };
 
     await setLocal(keyValue);
@@ -98,7 +98,7 @@ async function addKeyword(keyword) {
 
                 // 파싱 데이터 html 로 변경
                 let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-                if (!!keywordNoticeList[selectedKeyword]) {
+                if (!!!keywordNoticeList[selectedKeyword]) {
 
                 } else if (keywordNoticeList[selectedKeyword].length == 0) {
                     keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -179,7 +179,7 @@ async function deleteKeyword(keyword) {
 
             // 파싱 데이터 html 로 변경
             let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-            if (!!keywordNoticeList[selectedKeyword]) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -245,7 +245,7 @@ async function updateKeywordSearch() {
 
             // 파싱 데이터 html 로 변경
             let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-            if (keywordNoticeList == undefined || keywordNoticeList == null) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML = `<div class="notice-empty">검색 결과가 없습니다.</div>`
@@ -362,7 +362,7 @@ function setKeywordBtn() {
 
             keywordNoticeGroup.innerHTML = ``;
 
-            if (keywordNoticeList == undefined || keywordNoticeList == null) {
+            if (!!!keywordNoticeList[selectedKeyword]) {
 
             } else if (keywordNoticeList[selectedKeyword].length == 0) {
                 keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`

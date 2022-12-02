@@ -14,9 +14,9 @@
         "newtab": "./src/index.html"
     },
     "icons": {
-      "16": "./assets/images/심볼_01.png",
-      "32": "./assets/images/심볼_01.png",
-      "48": "./assets/images/심볼_01.png",
-      "128": "./assets/images/심볼_01.png"
+      "16": "./assets/images/symbol.png",
+      "32": "./assets/images/symbol.png",
+      "48": "./assets/images/symbol.png",
+      "128": "./assets/images/symbol.png"
     }
 }
