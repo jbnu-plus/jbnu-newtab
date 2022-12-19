@@ -40,7 +40,7 @@ fetch(univURL).then((res) => res.text()).then((html) => {
     } else {
         let index = 1;
         for (const notice of noticeList) {
-            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
+            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}<small class="mute">${notice.date}</small></div></div>`;
             noticeGroup.innerHTML += noticeElement;
         }
     }
