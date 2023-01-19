@@ -35,7 +35,7 @@ async function retrieveData() {
                 
                 today = new Date()
                 today.setHours(0, 0, 0, 0);
-                threeDayAgo = new Date(today.setDate(today.getDate()-3));
+                threeDayAgo = new Date(today.setDate(today.getDate() - 2));
                 if (new Date(date) < threeDayAgo) {
                     isEnd = true
                     break;
