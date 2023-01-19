@@ -4,48 +4,63 @@ let selectedKeyword = '';
 let myFile = {};
 let noticeList = [];
 let keywordNoticeList = {};
-fetch(univURL).then((res) => res.text()).then((html) => {
-    // html 파싱
-    let parser = new DOMParser();
-    let doc = parser.parseFromString(html, 'text/html');
 
-    let trElement = doc.querySelectorAll('table tbody tr');
-
-    for (let i = 0; i < trElement.length; i++) {
-        let notice = {};
-        let thElement = trElement[i].children;
-
-        if (thElement[0].innerText == "") continue;
-
-
-        let groupElement = thElement[1].querySelector('span');
-        let leftElement = thElement[2].querySelector('span a');
-
-        notice['group'] = groupElement.innerText;
-        notice['left'] = leftElement.innerText;
-        notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-        date = thElement[5].innerText;
-        if (new Date(date) > new Date())
+async function retrieveData() {
+    isEnd = false
+    for(let i = 0; i < 10; i++) {
+        if(isEnd) {
             break;
-        notice['date'] = date;
-
-        noticeList.push(notice);
+        }
+        await fetch(univURL + `&pno=${i}`).then((res) => res.text()).then((html) => {
+            // html 파싱
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+        
+            let trElement = doc.querySelectorAll('table tbody tr');
+        
+            for (let i = 0; i < trElement.length; i++) {
+                let notice = {};
+                let thElement = trElement[i].children;
+        
+                if (thElement[0].innerText == "") continue;
+        
+        
+                let groupElement = thElement[1].querySelector('span');
+                let leftElement = thElement[2].querySelector('span a');
+        
+                notice['group'] = groupElement.innerText;
+                notice['left'] = leftElement.innerText;
+                notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
+                date = thElement[5].innerText;
+                
+                today = new Date()
+                today.setHours(0, 0, 0, 0);
+                pivotDate = new Date(today.setDate(today.getDate() - 2));
+                if (new Date(date) < pivotDate) {
+                    isEnd = true
+                    break;
+                }
+                notice['date'] = date;
+        
+                noticeList.push(notice);
+            }
+        });
     }
-
     // 파싱 데이터 html 로 변경
-    let noticeGroup = document.getElementById("noticeGroup");
-
+    let noticeGroup = document.getElementById("noticeList");
+        
     if (noticeList.length == 0) {
         noticeGroup.innerHTML += `<div class="notice-empty">올라온 공지가 없습니다.</div>`
     } else {
         let index = 1;
         for (const notice of noticeList) {
-            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}</div></div>`;
+            let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}<small class="mute">${notice.date}</small></div></div>`;
             noticeGroup.innerHTML += noticeElement;
         }
     }
+}
 
-});
+retrieveData();
 
 updateKeywordSearch();
 
