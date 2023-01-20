@@ -35,7 +35,7 @@ async function retrieveData() {
                 
                 today = new Date()
                 today.setHours(0, 0, 0, 0);
-                pivotDate = new Date(today.setDate(today.getDate() - 2));
+                pivotDate = new Date(today.setDate(today.getDate() - 0));
                 if (new Date(date) < pivotDate) {
                     isEnd = true
                     break;
