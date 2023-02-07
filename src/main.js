@@ -1,4 +1,5 @@
-// const baseURL = `http://localhost:8080`;
+import * as chromeAPI from "./chromeAPI.js";
+
 const univURL = `http://www.jbnu.ac.kr/kor/?menuID=139`;
 let selectedKeyword = '';
 let myFile = {};
@@ -6,7 +7,7 @@ let noticeList = [];
 let keywordNoticeList = {};
 
 async function retrieveData() {
-    isEnd = false
+    let isEnd = false
     for(let i = 0; i < 10; i++) {
         if(isEnd) {
             break;
@@ -31,11 +32,11 @@ async function retrieveData() {
                 notice['group'] = groupElement.innerText;
                 notice['left'] = leftElement.innerText;
                 notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                date = thElement[5].innerText;
+                let date = thElement[5].innerText;
                 
-                today = new Date()
+                let today = new Date()
                 today.setHours(0, 0, 0, 0);
-                pivotDate = new Date(today.setDate(today.getDate() - 0));
+                let pivotDate = new Date(today.setDate(today.getDate() - 0));
                 if (new Date(date) < pivotDate) {
                     isEnd = true
                     break;
@@ -71,7 +72,7 @@ async function addKeyword(keyword) {
     selectedKeyword = keyword
     let keyValue = { "keyword": keywords };
 
-    await setLocal(keyValue);
+    await chromeAPI.setLocal(keyValue);
     
     let keywordList = document.getElementById('keywordList');
         keywordList.innerHTML = ``;
@@ -101,9 +102,8 @@ async function addKeyword(keyword) {
                     notice['group'] = groupElement.innerText;
                     notice['left'] = leftElement.innerText;
                     notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                    date = thElement[5].innerText;
-                    // if(new Date(date) < new Date()) 
-                    //     break;
+                    let date = thElement[5].innerText;
+                    
                     notice['date'] = date;
 
                     keywordNoticeArr.push(notice);
@@ -152,7 +152,7 @@ async function deleteKeyword(keyword) {
 
     let keyValue = { "keyword": keywords };
 
-    await setLocal(keyValue);
+    await chromeAPI.setLocal(keyValue);
     
     let keywordList = document.getElementById('keywordList');
     keywordList.innerHTML = ``;
@@ -182,7 +182,7 @@ async function deleteKeyword(keyword) {
                 notice['group'] = groupElement.innerText;
                 notice['left'] = leftElement.innerText;
                 notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                date = thElement[5].innerText;
+                let date = thElement[5].innerText;
                 // if(new Date(date) < new Date()) 
                 //     break;
                 notice['date'] = date;
@@ -250,7 +250,7 @@ async function updateKeywordSearch() {
                 notice['group'] = groupElement.innerText;
                 notice['left'] = leftElement.innerText;
                 notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                date = thElement[5].innerText;
+                let date = thElement[5].innerText;
                 notice['date'] = date;
 
                 keywordNoticeArr.push(notice);
@@ -285,7 +285,7 @@ async function updateKeywordSearch() {
 }
 
 async function getKeywords() {
-    const data = await getLocal('keyword');
+    const data = await chromeAPI.getLocal('keyword');
     if (data.constructor === Object && Object.keys(data).length === 0) {
         return [];
     } else {
@@ -294,29 +294,6 @@ async function getKeywords() {
     }
 }
 
-function getLocal(key) {
-    return new Promise((resovle, reject) => {
-        chrome.storage.local.get(key, (item) => {
-            if (chrome.runtime.lastError) {
-                return reject(chrome.runtime.lastError);
-            }
-
-            resovle(item);
-        });
-    });
-}
-
-function setLocal(key) {
-    return new Promise((resovle, reject) => {
-        chrome.storage.local.set(key, (item => {
-            if(chrome.runtime.lastError) {
-                return reject(chrome.runtime.lastError);
-            }
-
-            resovle(item);
-        }));
-    });
-}
 function updateCheckBoxEventListener() {
 
     let checkBoxes = document.getElementsByClassName("check-box");

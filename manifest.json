@@ -4,14 +4,19 @@
     "homepage_url": "https://github.com/kimhyun5u/jbnu-newtab",
     "version": "1.1.1",
     "manifest_version": 3,
+    "background": {
+      "service_worker": "src/background.js",
+      "type": "module"
+    },
     "permissions": [
         "storage"
     ],
     "host_permissions": [
-      "*://*.jbnu.ac.kr/*"
+      "http://*/*",
+      "https://*/*"
     ],
     "chrome_url_overrides": {
-        "newtab": "./src/index.html"
+        "newtab": "src/index.html"
     },
     "icons": {
       "16": "./assets/images/symbol.png",
