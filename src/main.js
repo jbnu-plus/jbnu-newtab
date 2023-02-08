@@ -1,4 +1,5 @@
 import * as chromeAPI from "./chromeAPI.js";
+import * as htmlParser from "./htmlParser.js";
 
 const univURL = `http://www.jbnu.ac.kr/kor/?menuID=139`;
 let selectedKeyword = '';
@@ -6,45 +7,21 @@ let myFile = {};
 let noticeList = [];
 let keywordNoticeList = {};
 
+let today = new Date()
+today.setHours(0, 0, 0, 0);
+let pivotDate = new Date(today.setDate(today.getDate() - 0));
+
 async function retrieveData() {
-    let isEnd = false
+    let isEnd = false;
+
     for(let i = 0; i < 10; i++) {
         if(isEnd) {
             break;
         }
         await fetch(univURL + `&pno=${i}`).then((res) => res.text()).then((html) => {
-            // html 파싱
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, 'text/html');
-        
-            let trElement = doc.querySelectorAll('table tbody tr');
-        
-            for (let i = 0; i < trElement.length; i++) {
-                let notice = {};
-                let thElement = trElement[i].children;
-        
-                if (thElement[0].innerText == "") continue;
-        
-        
-                let groupElement = thElement[1].querySelector('span');
-                let leftElement = thElement[2].querySelector('span a');
-        
-                notice['group'] = groupElement.innerText;
-                notice['left'] = leftElement.innerText;
-                notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                let date = thElement[5].innerText;
-                
-                let today = new Date()
-                today.setHours(0, 0, 0, 0);
-                let pivotDate = new Date(today.setDate(today.getDate() - 0));
-                if (new Date(date) < pivotDate) {
-                    isEnd = true
-                    break;
-                }
-                notice['date'] = date;
-        
-                noticeList.push(notice);
-            }
+                let result = htmlParser.parseHTMLWithPivotDate(html, pivotDate);
+                noticeList = noticeList.concat(result[0]);
+                isEnd = result[1];
         });
     }
     // 파싱 데이터 html 로 변경
@@ -82,32 +59,7 @@ async function addKeyword(keyword) {
             }
             else keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword " value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
             fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keywords[i]}&sfv=subject`).then((res) => res.text()).then((html) => {
-                // html 파싱
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(html, 'text/html');
-
-                let trElement = doc.querySelectorAll('table tbody tr');
-
-                let keywordNoticeArr = [];
-                for (let j = 0; j < trElement.length; j++) {
-                    let notice = {};
-                    let thElement = trElement[j].children;
-
-                    if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
-
-
-                    let groupElement = thElement[1].querySelector('span');
-                    let leftElement = thElement[2].querySelector('span a');
-
-                    notice['group'] = groupElement.innerText;
-                    notice['left'] = leftElement.innerText;
-                    notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                    let date = thElement[5].innerText;
-                    
-                    notice['date'] = date;
-
-                    keywordNoticeArr.push(notice);
-                }
+                let keywordNoticeArr = htmlParser.parseHTML(html);
 
                 keywordNoticeList[keywords[i]] = keywordNoticeArr;
 
@@ -162,33 +114,7 @@ async function deleteKeyword(keyword) {
         }
         else keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword " value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
         fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keywords[i]}&sfv=subject`).then((res) => res.text()).then((html) => {
-            // html 파싱
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, 'text/html');
-
-            let trElement = doc.querySelectorAll('table tbody tr');
-
-            let keywordNoticeArr = [];
-            for (let j = 0; j < trElement.length; j++) {
-                let notice = {};
-                let thElement = trElement[j].children;
-
-                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
-
-
-                let groupElement = thElement[1].querySelector('span');
-                let leftElement = thElement[2].querySelector('span a');
-
-                notice['group'] = groupElement.innerText;
-                notice['left'] = leftElement.innerText;
-                notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                let date = thElement[5].innerText;
-                // if(new Date(date) < new Date()) 
-                //     break;
-                notice['date'] = date;
-
-                keywordNoticeArr.push(notice);
-            }
+            let keywordNoticeArr = htmlParser.parseHTML(html);
 
             keywordNoticeList[keywords[i]] = keywordNoticeArr;
 
@@ -231,30 +157,7 @@ async function updateKeywordSearch() {
         }
         else keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword " value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
         fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keywords[i]}&sfv=subject`).then((res) => res.text()).then((html) => {
-            // html 파싱
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(html, 'text/html');
-
-            let trElement = doc.querySelectorAll('table tbody tr');
-
-            let keywordNoticeArr = [];
-            for (let j = 0; j < trElement.length; j++) {
-                let notice = {};
-                let thElement = trElement[j].children;
-
-                if (thElement[0].innerText == "" || thElement[0].innerText =="조건에 해당되는 글이 존재하지 않습니다.") continue;
-
-                let groupElement = thElement[1].querySelector('span');
-                let leftElement = thElement[2].querySelector('span a');
-
-                notice['group'] = groupElement.innerText;
-                notice['left'] = leftElement.innerText;
-                notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + leftElement.getAttribute('href');
-                let date = thElement[5].innerText;
-                notice['date'] = date;
-
-                keywordNoticeArr.push(notice);
-            }
+            let keywordNoticeArr = htmlParser.parseHTML(html);
 
             keywordNoticeList[keywords[i]] = keywordNoticeArr;
 
