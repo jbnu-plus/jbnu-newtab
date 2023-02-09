@@ -44,54 +44,40 @@ updateKeywordSearch();
 
 async function addKeyword(keyword) {
     let keywords = await getKeywords();
+    let recentNotices = await getRecentNotices();
+    let recentNotice;
+
+    fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keyword}&sfv=subject`).then((res) => res.text()).then((html) => {
+        let result = htmlParser.parseHTML(html);
+        if(result.length > 1) {
+            recentNotice = result[1];
+
+            recentNotices.push({
+                "keyword": keyword,
+                "recentNotice": recentNotice
+            });
+            let recenetNoticesKeyValue = {"recentNotice": recentNotices};
+            chromeAPI.setLocal(recenetNoticesKeyValue);
+        } else {
+            recentNotices.push({
+                "keyword": keyword,
+                "recentNotice": null
+            });
+            let recenetNoticesKeyValue = {"recentNotice": recentNotices};
+            chromeAPI.setLocal(recenetNoticesKeyValue);
+        }
+    });
 
     keywords.push(keyword);
     selectedKeyword = keyword
-    let keyValue = { "keyword": keywords };
-
-    await chromeAPI.setLocal(keyValue);
     
-    let keywordList = document.getElementById('keywordList');
-        keywordList.innerHTML = ``;
-        for (let i = 0; i < keywords.length; i++) {
-            if (keywords[i] === selectedKeyword) {
-                keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword selected-keyword" value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
-            }
-            else keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword " value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
-            fetch(`https://www.jbnu.ac.kr/kor/?menuID=139&subject=${keywords[i]}&sfv=subject`).then((res) => res.text()).then((html) => {
-                let keywordNoticeArr = htmlParser.parseHTML(html);
-
-                keywordNoticeList[keywords[i]] = keywordNoticeArr;
-
-                // 파싱 데이터 html 로 변경
-                let keywordNoticeGroup = document.getElementById("keywordNoticeList");
-                if (!!!keywordNoticeList[selectedKeyword]) {
-
-                } else if (keywordNoticeList[selectedKeyword].length == 0) {
-                    keywordNoticeGroup.innerHTML += `<div class="notice-empty">검색 결과가 없습니다.</div>`
-                } else {
-                    let index = 1;
-                    for (const notice of keywordNoticeList[selectedKeyword]) {
-                        let noticeElement = `<div class="notice-element">${index++}. <a class="notice-name" target="_blank" href="${notice.leftLink}">${notice.left}<small class="mute">${notice.date}</small></div></div>`;
-                        keywordNoticeGroup.innerHTML += noticeElement;
-                    }
-                }
-
-                let deleteBtns = document.getElementsByClassName("keyword-delete-btn");
-                for (let i = 0; i < deleteBtns.length; i++) {
-                    deleteBtns[i].addEventListener('click', (event) => {
-                        deleteKeyword(deleteBtns[i].getAttribute('value'));
-                    });
-                }
-            });
-
-
-            setKeywordBtn();
-        }
+    let keyValue = { "keyword": keywords };
+    await chromeAPI.setLocal(keyValue);
 }
 
 async function deleteKeyword(keyword) {
     let keywords = await getKeywords();
+    let recentNotices = await getRecentNotices();
 
     for (let i = 0; i < keywords.length; i++) {
         if (keywords[i] == keyword) {
@@ -99,15 +85,22 @@ async function deleteKeyword(keyword) {
             else if (keyword == selectedKeyword && i == 0 && keywords.length > 1) selectedKeyword = keywords[i + 1];
             keywords.splice(i, 1);
         }
+        if (recentNotices[i].keyword == keyword) {
+            recentNotices.splice(i, 1);
+        }
     }
 
 
-    let keyValue = { "keyword": keywords };
+    let keyValue = { "keyword": keywords, "recentNotice": recentNotices};
 
     await chromeAPI.setLocal(keyValue);
     
     let keywordList = document.getElementById('keywordList');
     keywordList.innerHTML = ``;
+    if (keywords.length == 0) {
+        let keywordNoticeGroup = document.getElementById("keywordNoticeList");
+        keywordNoticeGroup.innerHTML = ``;
+    }
     for (let i = 0; i < keywords.length; i++) {
         if (keywords[i] === selectedKeyword) {
             keywordList.innerHTML += `<div class="keyword-container me-2"><div class="keyword selected-keyword" value="${keywords[i]}">${keywords[i]}</div><div class="keyword-delete-btn" value="${keywords[i]}"> x </div></div>`;
@@ -197,6 +190,16 @@ async function getKeywords() {
     }
 }
 
+async function getRecentNotices() {
+    const data = await chromeAPI.getLocal('recentNotice');
+    if (data.constructor === Object && Object.keys(data).length === 0) {
+        return [];
+    } else {
+        const recentNotice = data['recentNotice'];
+        return recentNotice;
+    }
+}
+
 function updateCheckBoxEventListener() {
 
     let checkBoxes = document.getElementsByClassName("check-box");
@@ -234,7 +237,9 @@ keywordAddBtn.addEventListener('click', (e) => {
     document.getElementById('keywordSubmit').addEventListener('click', (e) => {
         let keyword = document.getElementById('keywordInput').value;
         if (!!keyword && keyword != "")
-            addKeyword(keyword);
+            addKeyword(keyword).then(() => {
+                updateKeywordSearch();
+            });
         document.getElementById('keywordInput').value = '';
     });
 });
