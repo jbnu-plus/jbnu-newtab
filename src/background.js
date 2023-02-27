@@ -42,7 +42,9 @@ const searchKeyword = async function() {
                     chromeAPI.createNotification("새로운 공지사항이 등록됐습니다.", noticeList[idx].left, noticeList[idx].leftLink);
                 }
             }
-            recentNotices[i].recentNotice = noticeList[0];
+            if (!!noticeList[0]) {
+                recentNotices[i].recentNotice = noticeList[0];
+            }
         });
     }
 
@@ -53,6 +55,5 @@ const searchKeyword = async function() {
 chrome.alarms.create({ periodInMinutes: 1});
 
 chrome.alarms.onAlarm.addListener(() => {
-    console.log(new Date())
     searchKeyword().catch(console.log);
 });
