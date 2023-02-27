@@ -2,12 +2,25 @@ function parseHTML(html){
     let noticeList = [];
 
     let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g;
-    let trElement = re.exec(html)[0].split('</tr>')
+    let trElement = re.exec(html);
+
+    if (trElement == null) {
+        return [];
+    }
+
+    trElement = trElement[0].split('</tr>');
 
     for (let j = 1; j < trElement.length; j++) {
         if (trElement.length == 1 || trElement[j] == ""){
             break;
         }
+        // mnom
+        re = /<th scope="row" class="mnom">([^]*)<\/th>/g;
+       
+        if ( re.exec(trElement[j])[1].includes("<img")) {
+            continue;
+        }
+
         let notice = {};
         
         // group 
@@ -37,12 +50,26 @@ function parseHTMLWithPivotDate(html, pivotDate){
     let noticeList = [];
 
     let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g;
-    let trElement = re.exec(html)[0].split('</tr>')
+    let trElement = re.exec(html);
+
+    if (trElement == null) {
+        return [[], true];
+    }
+    
+    trElement = trElement[0].split('</tr>');
+
 
     for (let j = 1; j < trElement.length; j++) {
         if (trElement.length == 1 || trElement[j] == ""){
             break;
         }
+         // mnom
+         re = /<th scope="row" class="mnom">([^]*)<\/th>/g;
+       
+         if ( re.exec(trElement[j])[1].includes("<img")) {
+             continue;
+         }
+
         let notice = {};
         
         // group 
