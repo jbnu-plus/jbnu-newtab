@@ -8,3 +8,6 @@
 - 오늘 올라온 전북대학교 학사 공지 확인
 - 키워드 검색
 - 키워드 게시물 알람
+
+## 다운로드 링크
+chrome web store : https://chrome.google.com/webstore/detail/jbnu-%EC%83%88%ED%83%AD/bolbpgoafhlffgglcknklpedccdfbigk?hl=ko&authuser=0
