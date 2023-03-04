@@ -57,3 +57,11 @@ chrome.alarms.create({ periodInMinutes: 1});
 chrome.alarms.onAlarm.addListener(() => {
     searchKeyword().catch(console.log);
 });
+
+chrome.notifications.onClicked.addListener(
+    (notificationId) => {
+        const link = notificationId.split(',');
+        chromeAPI.createNewTab(link[0], notificationId);
+        
+    }
+);

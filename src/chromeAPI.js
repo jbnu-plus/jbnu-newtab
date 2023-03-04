@@ -25,7 +25,7 @@ function setLocal(key) {
 }
 
 function createNotification(title, message, link) {
-    let id = link + common.uuidv4();
+    let id = link + "," + common.uuidv4();
     
     chrome.notifications.create(id, {
         title: title,
@@ -33,20 +33,14 @@ function createNotification(title, message, link) {
         iconUrl: '../assets/images/symbol.png',
         type: 'basic'
     });
-    
-    chrome.notifications.onClicked.addListener(
-        (notificationId) => {
-            if (notificationId == id) {
-                createNewTab(link, notificationId);
-            }
-        }
-    );
 }
 
 function createNewTab(link, notificationId) {
     chrome.tabs.create({
         url: link.replaceAll("amp;", "")
+
     });
+
     chrome.notifications.clear(notificationId);
 }
-export {getLocal, setLocal, createNotification}
+export {getLocal, setLocal, createNotification, createNewTab}
