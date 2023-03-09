@@ -52,16 +52,23 @@ const searchKeyword = async function() {
     chromeAPI.setLocal(keyValue);
 }
 
+const updateRecentNotices = async function(details) {
+    if (details.reason === "update" && details.previousVersion < '1.1.0') {
+        const keyValue = {"keyword": []}
+        await chromeAPI.setLocal(keyValue);
+    }
+};
+
 chrome.alarms.create({ periodInMinutes: 1});
 
 chrome.alarms.onAlarm.addListener(() => {
     searchKeyword().catch(console.log);
 });
 
-chrome.notifications.onClicked.addListener(
-    (notificationId) => {
+chrome.notifications.onClicked.addListener((notificationId) => {
         const link = notificationId.split(',');
         chromeAPI.createNewTab(link[0], notificationId);
         
-    }
-);
+});
+
+chrome.runtime.onInstalled.addListener(updateRecentNotices);
