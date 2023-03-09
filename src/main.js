@@ -3,7 +3,6 @@ import * as htmlParser from "./htmlParser.js";
 
 const univURL = `http://www.jbnu.ac.kr/kor/?menuID=139`;
 let selectedKeyword = '';
-let myFile = {};
 let noticeList = [];
 let keywordNoticeList = {};
 
@@ -197,31 +196,6 @@ async function getRecentNotices() {
     } else {
         const recentNotice = data['recentNotice'];
         return recentNotice;
-    }
-}
-
-function updateCheckBoxEventListener() {
-
-    let checkBoxes = document.getElementsByClassName("check-box");
-
-    for (let checkBox of checkBoxes) {
-        checkBox.addEventListener('change', () => {
-            if (checkBox.checked) {
-                const key = checkBox.parentElement.parentElement.children[1].textContent;
-                const keyValue = {};
-                keyValue[key] = true;
-                // save local storage
-                chrome.storage.local.set(keyValue, () => {
-                    console.log(keyValue);
-                });
-            } else {
-                const key = checkBox.parentElement.parentElement.children[1].textContent;
-                const keyValue = {};
-                keyValue[key] = false;
-                // save local storage
-                chrome.storage.local.set(keyValue);
-            }
-        });
     }
 }
 
