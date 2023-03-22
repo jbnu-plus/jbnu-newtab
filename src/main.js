@@ -6,19 +6,19 @@ let selectedKeyword = '';
 let noticeList = [];
 let keywordNoticeList = {};
 
-let today = new Date()
+const today = new Date()
 today.setHours(0, 0, 0, 0);
-let pivotDate = new Date(today.setDate(today.getDate() - 0));
+const pivotDate = new Date(today.setDate(today.getDate() - 0));
 
 async function retrieveData() {
     let isEnd = false;
 
-    for(let i = 0; i < 10; i++) {
+    for(let i = 1; i <= 10; i++) {
         if(isEnd) {
             break;
         }
         await fetch(univURL + `&pno=${i}`).then((res) => res.text()).then((html) => {
-                let result = htmlParser.parseHTMLWithPivotDate(html, pivotDate);
+                const result = htmlParser.parseHTMLWithPivotDate(html, pivotDate);
                 noticeList = noticeList.concat(result[0]);
                 isEnd = result[1];
         });
