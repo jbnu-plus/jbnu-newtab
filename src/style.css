@@ -124,12 +124,12 @@ body {
     align-items: center;
 }
 .logo {
-    width: 250px;
+    width: 150px;
 }
 .logo-group {
     position: absolute;
     top: 90%;
-    left: 80%;
+    left: 85%;
 }
 .notice-group {
     color: white;
