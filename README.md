@@ -1,5 +1,5 @@
 # 전북대학교 새탭 | JBNU newtab
-![image](https://github.com/riverallzero/jbnu-newtab/assets/93754504/4467326f-5c0d-403b-92a4-ce52a176979a)
+![image](https://github.com/jbnu-plus/jbnu-newtab/assets/93754504/de4cde97-84ae-4020-8071-a1d665a85aee)
 
 ## About
 전북대학교의 공지사항을 새탭에서 바로 볼 수 있는 어플리케이션
