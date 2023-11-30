@@ -1,7 +1,7 @@
 .keyword-notice-group {
     color: white;
     height: 200px;
-    width: 80%;
+    width: 90%;
 }
 .keyword-notice-list {
     overflow-y: scroll; 
@@ -20,8 +20,9 @@
     border-radius: 10px;
 }
 body {
-    padding: 100px;
+    padding: 5%;
     background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(../assets/images/bg.jpg);
+    background-attachment: fixed;
     background-repeat: no-repeat;
     height: 100vh;
     background-size: cover;
@@ -34,6 +35,10 @@ body {
 }
 .keyword-add-btn {
     color: #204986;
+    margin: -50px 0 0 150px;
+    keyword-grid.absolute {
+    position: absolute;
+    }
     font-size: 25px;
     /* background-color: white; */
     text-align: center;
@@ -53,7 +58,6 @@ body {
 }
 .keyword-grid {
     display: grid;
-    grid-template-columns:  155px 40px 1fr;
     align-items: center;
 }
 .keyword-container {
@@ -65,7 +69,7 @@ body {
 .keyword-list {
     vertical-align: baseline;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
+    grid-template-columns: repeat(auto-fill, 110px);
 }
 .keyword-delete-btn {
     /* float: right; */
@@ -82,7 +86,7 @@ body {
 }
 .keyword {
     /* float: left; */
-    width: 90px;
+    width: 100px;
     height: 30px;
     text-align: center;
     overflow: hidden;
@@ -116,7 +120,7 @@ body {
     margin: 5%;
     font-size: 25px;
     cursor: pointer;
-    background-color: blue;
+    background-color: #204986;
     border-radius: 5%;
     text-align: center;
 }
@@ -126,17 +130,23 @@ body {
     align-items: center;
 }
 .logo {
-    width: 250px;
+    width: 270px;
 }
 .logo-group {
-    position: absolute;
-    top: 90%;
-    left: 80%;
+    display: grid;
+    place-items: center;
+}
+.table{
+    width: 100%;
+}
+.table-group{
+    display: grid;
+    place-items: center;
 }
 .notice-group {
     color: white;
     height: 200px;
-    width: 80%;
+    width: 90%;
 }
 
 .notice-list {
@@ -174,7 +184,7 @@ body {
 }
 
 .unselectable {
-    user-drag: none;
+    user-zoom: none;
     -webkit-user-drag: none;
     user-select: none;
     -moz-user-select: none;
@@ -191,9 +201,4 @@ body {
 
 .report-and-question:hover {
     color: rgb(170, 170, 170);
-}
-
-h1{
-    color: rgb(170, 170, 170);
-    text-align : center;
 }
