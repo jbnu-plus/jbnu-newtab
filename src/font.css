@@ -1,8 +1,8 @@
 @font-face {
-    font-family: 'Noto Sans KR';
-    src:url('../fonts/NotoSansKR-Regular.otf');
+    font-family: 'IBMPlexSansKR';
+    src:url('../fonts/IBMPlexSansKR-Regular.otf');
 } 
 
 body {
-    font-family: 'Noto Sans KR';
+    font-family: 'IBMPlexSansKR';
 }
