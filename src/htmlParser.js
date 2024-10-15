@@ -1,102 +1,79 @@
-function parseHTML(html){
-    let noticeList = [];
+const articleNum_pattern = /onclick="pf_DetailMove\('(\d+)'\)/
+const date_pattern = /<li>(\d{4}-\d{2}-\d{2})<\/li>/
+const title_pattern =
+  /<a[^>]*>\s*(?:<img[^>]*>)?\s*([^<]+)(?:<img[^>]*>)?\s*<\/a>/
 
-    let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g;
-    let trElement = re.exec(html);
+function getArticleLink(articleNumber) {
+  return `https://www.jbnu.ac.kr/web/Board/${articleNumber}/detailView.do?pageIndex=2&menu=2377`
+}
+function getNotice(tr) {
+  let notice = {}
 
-    if (trElement == null) {
-        return [];
-    }
+  let titleMatch = title_pattern.exec(tr)
+  let articleNumMatch = articleNum_pattern.exec(tr)
+  let dateMatch = date_pattern.exec(tr)
+  // left(제목)
+  notice["left"] = titleMatch ? titleMatch[1] : null
 
-    trElement = trElement[0].split('</tr>');
+  // 링크
+  notice["leftLink"] = articleNumMatch
+    ? getArticleLink(articleNumMatch[1])
+    : null
 
-    for (let j = 1; j < trElement.length; j++) {
-        if (trElement.length == 1 || trElement[j] == ""){
-            break;
-        }
-        // mnom
-        re = /<th scope="row" class="mnom">([^]*)<\/th>/g;
-       
-        if ( re.exec(trElement[j])[1].includes("<img")) {
-            continue;
-        }
+  // 날짜
+  notice["date"] = dateMatch ? dateMatch[1] : null
 
-        let notice = {};
-        
-        // group 
-        re = /<span class="group">([^>]*)<\/span>/g;
-        notice['group'] = re.exec(trElement[j])[1];
-
-        // left(제목)
-        re = /<a[^>]*>([^<]*)/g;
-        notice['left'] = re.exec(trElement[j])[1];
-
-        // 링크
-        re = /<a href="([^>"]*)\"/g;
-        notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + re.exec(trElement[j])[1];
-
-        // 날짜
-        re = /<td class="mview">([0-9]{4}.[0-9]{2}.[0-9]{2})<\/td>/g;
-        let date = re.exec(trElement[j])[1];
-        notice['date'] = date; 
-
-        noticeList.push(notice);
-    }
-
-    return noticeList;
+  return notice
 }
 
-function parseHTMLWithPivotDate(html, pivotDate){
-    let noticeList = [];
+function parseHTML(html) {
+  let noticeList = []
 
-    let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g;
-    let trElement = re.exec(html);
+  let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g
+  let trElement = re.exec(html)
 
-    if (trElement == null) {
-        return [[], true];
-    }
-    
-    trElement = trElement[0].split('</tr>');
+  if (trElement == null) {
+    return []
+  }
 
+  trElement = trElement[0].split("</tr>")
 
-    for (let j = 1; j < trElement.length; j++) {
-        if (trElement.length == 1 || trElement[j] == ""){
-            break;
-        }
-         // mnom
-         re = /<th scope="row" class="mnom">([^]*)<\/th>/g;
-       
-         if ( re.exec(trElement[j])[1].includes("<img")) {
-             continue;
-         }
-
-        let notice = {};
-        
-        // group 
-        re = /<span class="group">([^>]*)<\/span>/g;
-        notice['group'] = re.exec(trElement[j])[1];
-
-        // left(제목)
-        re = /<a[^>]*>([^<]*)/g;
-        notice['left'] = re.exec(trElement[j])[1];
-
-        // 링크
-        re = /<a href="([^>"]*)\"/g;
-        notice['leftLink'] = "https://www.jbnu.ac.kr/kor" + re.exec(trElement[j])[1];
-
-        // 날짜
-        re = /<td class="mview">([0-9]{4}.[0-9]{2}.[0-9]{2})<\/td>/g;
-        let date = re.exec(trElement[j])[1];
-        notice['date'] = date; 
-        
-
-        if (new Date(date) < pivotDate) {
-            return [noticeList, true]
-        }
-        noticeList.push(notice);
+  for (let j = 1; j < trElement.length; j++) {
+    if (trElement.length == 1 || trElement[j] == "") {
+      break
     }
 
-    return [noticeList, false];
+    noticeList.push(getNotice(trElement[j]))
+  }
+
+  return noticeList
 }
 
-export {parseHTML, parseHTMLWithPivotDate}
+function parseHTMLWithPivotDate(html, pivotDate) {
+  let noticeList = []
+
+  let re = /<tr[^>]*>((.|[\n\r])*)<\/tr>/g
+  let trElement = re.exec(html)
+
+  if (trElement == null) {
+    return [[], true]
+  }
+
+  trElement = trElement[0].split("</tr>")
+
+  for (let j = 1; j < trElement.length; j++) {
+    if (trElement.length == 1 || trElement[j] == "") {
+      break
+    }
+    let notice = getNotice(trElement[j])
+
+    if (new Date(notice["date"]) < pivotDate) {
+      return [noticeList, true]
+    }
+    noticeList.push(notice)
+  }
+
+  return [noticeList, false]
+}
+
+export { parseHTML, parseHTMLWithPivotDate }
